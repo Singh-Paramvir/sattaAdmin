@@ -31,25 +31,7 @@ const Navbar = () => {
   return (
     <>
       <header>
-        <nav className="navbar navbar-expand-lg top-nav" style={{ backgroundColor: "#343a40", width: "100%", padding: "10px 20px" }}>
-          <div className="container-fluid d-flex justify-content-between align-items-center" id="fluid-set">
-            <div className="d-flex align-items-center">
-             
-            </div>
-            <div className="d-flex align-items-center">
-              {/* <a href="#" className="nav-link" style={{ marginLeft: "20px" }}>
-                <i className={`fa ${isNightMode ? 'fa-sun' : 'fa-moon'}`}></i>
-              </a> */}
-              <a href="#" className="nav-link" style={{ marginRight: "10px" }}>
-                <i className="fa-regular fa-bell" style={{ fontSize: "18px" }}></i>
-              </a>
-              <a href="#" className="nav-link" style={{ marginRight: "10px" }}>
-                <i className="fa-regular fa-circle-question" style={{ fontSize: "18px" }}></i>
-              </a>
-             
-            </div>
-          </div>
-        </nav>
+       
       </header>
       <style jsx>{`
         .night-mode {

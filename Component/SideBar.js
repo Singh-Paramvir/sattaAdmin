@@ -27,7 +27,12 @@ const SideBar = () => {
     <div>
       <div className={toggle ? "" : "toggle-sidebar"}>
         <button onClick={() => setToggle(!toggle)} className="btn primary bi bi-list toggle-sidebar" id="toggle-setting">
-          <img id="arrow-id" src="/others/arws.webp" />
+        <img 
+            id="arrow-id" 
+            src="menu.png" 
+            alt="Menu"
+            style={{ width: "30px", height: "30px" }} 
+          />
         </button>
 
         <ToastContainer
@@ -44,7 +49,7 @@ const SideBar = () => {
 
         <aside className="sidebar">
           <ul className="sidebar-nav" id="sidebar-nav">
-            <a className="navbar-brand" href="/" id="href-set">
+            <a className="navbar-brand"  id="href-set">
               <h2 id="coin-master-heading">ADMIN</h2>
             </a>
 
@@ -87,19 +92,19 @@ const SideBar = () => {
               {winListOpen && (
                 <ul id="win-list-nav" className="nav-content collapse show" data-bs-parent="#sidebar-nav">
                   <li>
-                    <a href="/">
+                    <a href="/#">
                       <i className="fa fa-circle"></i>
                       <span>Faridabad</span>
                     </a>
-                    <a href="/">
+                    <a href="/#">
                       <i className="fa fa-circle"></i>
                       <span>Gajiyabad</span>
                     </a>  
-                    <a href="/">
+                    <a href="/#">
                       <i className="fa fa-circle"></i>
                       <span>Gali.(ND/Agra)</span>
                     </a> 
-                    <a href="/">
+                    <a href="/#">
                       <i className="fa fa-circle"></i>
                       <span>Disawer (DS/PD)</span>
                     </a>                
