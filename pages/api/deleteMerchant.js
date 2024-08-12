@@ -9,9 +9,12 @@ export default async function handler(req, res) {
       const {data} = req.body;
       const {token} = req.body;
 
+      console.log(data,token,"here logs");
+      
+
       var config = {
         method: "post",
-        url: "https://new.suibox.my/api/v1/superAdmin/deleteMerchant",
+        url: "http://64.227.157.92:4000/api/v1/admin/deleteUser",
         headers: {
           'Authorization': `Bearer ${token}`
         },data
