@@ -29,7 +29,7 @@ const SideBar = () => {
         <button onClick={() => setToggle(!toggle)} className="btn primary bi bi-list toggle-sidebar" id="toggle-setting">
         <img 
             id="arrow-id" 
-            src="menu.png" 
+            src="arws.webp" 
             alt="Menu"
             style={{ width: "30px", height: "30px" }} 
           />
