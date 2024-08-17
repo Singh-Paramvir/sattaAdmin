@@ -6,6 +6,7 @@ import SideBar from "./SideBar";
 import Navbar from "./ui/Navbar";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form"; // Import Form from bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +16,11 @@ const MerchantList = () => {
   const [showModal, setShowModal] = useState(false); // Modal visibility state
   const [showDeleteModal, setShowDeleteModal] = useState(false); // Delete confirmation modal visibility state
   const [selectedUser, setSelectedUser] = useState(null); // Selected slot for editing or deleting
+  const [editData, setEditData] = useState({
+    mobileNo: "",
+    amount: "",
+    winAmount: "",
+  }); // State to store edited data
 
   const { data: session } = useSession();
   const router = useRouter();
@@ -76,16 +82,55 @@ const MerchantList = () => {
   const handleDeleteConfirm = async () => {
     try {
       const token = localStorage.getItem("token");
-      let data  = {
-        userId:selectedUser.refferdCode
-      }
-      await axios.post("/api/deleteMerchant", {token: token,data });
+      let data = {
+        userId: selectedUser.refferdCode,
+      };
+      await axios.post("/api/deleteMerchant", { token: token, data });
       notify("User deleted successfully");
       fetchMerchantUsers(); // Refresh the user list
     } catch (error) {
       notifyError("Error deleting user");
     } finally {
       setShowDeleteModal(false);
+    }
+  };
+
+  const handleEditClick = (user) => {
+    setSelectedUser(user);
+    setEditData({
+      mobileNo: user.mobileNo || "",
+      amount: user.amount || "",
+      winAmount: user.winAmount || "",
+    });
+    setShowModal(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const data = {
+        userId: selectedUser.refferdCode,
+        mobileNo: editData.mobileNo,
+        amount: editData.amount,
+        winAmount: editData.winAmount,
+      };
+      console.log(data,token,"here all data");
+      
+      await axios.post("/api/updateMerchant", { token: token, data });
+      notify("User updated successfully");
+      fetchMerchantUsers(); // Refresh the user list
+    } catch (error) {
+      notifyError("Error updating user");
+    } finally {
+      setShowModal(false);
     }
   };
 
@@ -123,9 +168,9 @@ const MerchantList = () => {
                       <th>RefferedCode</th>
                       <th>RefferdBy</th>
                       <th>Amount</th>
-                      <th>WinAmount</th> 
-                      <th>BidAmount</th> 
-                      <th>Action</th> 
+                      <th>WinAmount</th>
+                      <th>BidAmount</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,6 +184,12 @@ const MerchantList = () => {
                         <td>{user.winAmount !== null ? user.winAmount : 0}</td>
                         <td>{user.bidAmount !== null ? user.bidAmount : 0}</td>
                         <td>
+                          <Button
+                            variant="warning"
+                            onClick={() => handleEditClick(user)}
+                          >
+                            Edit
+                          </Button>{" "}
                           <Button
                             variant="danger"
                             onClick={() => handleDeleteClick(user)}
@@ -155,6 +206,53 @@ const MerchantList = () => {
           </div>
         </div>
       </section>
+
+      {/* Edit Modal */}
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+           
+            <Form.Group controlId="formAmount" className="mt-3">
+              <Form.Label>Amount</Form.Label>
+              <Form.Control
+                type="text"
+                name="amount"
+                value={editData.amount}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formWinAmount" className="mt-3">
+              <Form.Label>Win Amount</Form.Label>
+              <Form.Control
+                type="text"
+                name="winAmount"
+                value={editData.winAmount}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formBidAmount">
+              <Form.Label>Bid Amount</Form.Label>
+              <Form.Control
+                type="text"
+                name="bidAmount"
+                value={editData.bidAmount}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={handleModalClose}>

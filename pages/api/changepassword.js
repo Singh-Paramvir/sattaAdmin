@@ -2,23 +2,27 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
-
+  // const session = await getSession({ req });
   if (req.method === "POST") {
     try {
-        const data = req.body;
-        console.log(data, "data  to send to api")
+      const { token } = req.body; // Extract token and other data
+    
+
       var config = {
         method: "post",
-        url: "http://44.200.180.0:7777/api/v1/auth/change",
-        data
+        url: "http://64.227.157.92:4000/api/v1/admin/admindashboard",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        }, // Pass data directly
       };
-      await axios(config).then(function (response) {
-        res.status(200).json({ data: response.data.data });
-      });
+
+      const response = await axios(config);
+      console.log(JSON.stringify(response.data));
+      res.status(200).json({ data: response.data.data });
     } catch (err) {
-      console.log(err);
-      res.status(500).json({ Error: err });
+      console.error(err);
+      res.status(500).json({ Error: err.message });
     }
   }
 }
-

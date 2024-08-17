@@ -15,6 +15,7 @@ const MerchantList = () => {
   const [users, setUsers] = useState([]); // Initialize state for users
   const [showModal, setShowModal] = useState(false); // Modal visibility state
   const [selectedUser, setSelectedUser] = useState(null); // Selected slot for editing
+  const [depositData, setDepositData] = useState({ totalDeposit: 0, todaysDeposit: 0 }); // State for deposit data
   const [updatedSlot, setUpdatedSlot] = useState({
     sloteName: "",
     price: "",
@@ -32,6 +33,7 @@ const MerchantList = () => {
       router.push("/");
     } else {
       fetchMerchantUsers();
+      fetchDepositData(); // Fetch deposit data on component mount
     }
   }, []);
 
@@ -39,11 +41,21 @@ const MerchantList = () => {
     try {
       const token = localStorage.getItem("token");
       let res = await axios.post("/api/userHis", { token: token });
-      console.log(res.data.data.data, "dsdsdsdsd");
-
       setUsers(res.data.data.data); // Set the fetched data to users state
     } catch (error) {
       console.error("Error fetching merchant users:", error);
+    }
+  };
+
+  const fetchDepositData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post("/api/changepassword", { token: token });
+      console.log(res,"qwerty");
+      
+      setDepositData(res.data.data); // Set the deposit data
+    } catch (error) {
+      console.error("Error fetching deposit data:", error);
     }
   };
 
@@ -109,9 +121,7 @@ const MerchantList = () => {
         entryFee: updatedSlot.entryFee,
       };
   
-     
-      
-      const response = await axios.post(`/api/updateSlot`, { token: token,data });
+      const response = await axios.post(`/api/updateSlot`, { token: token, data });
       notify("Slot updated successfully");
       setShowModal(false);
       fetchMerchantUsers(); // Refresh the list after update
@@ -120,7 +130,6 @@ const MerchantList = () => {
       console.error("Error updating slot:", error);
     }
   };
-  
 
   return (
     <div className="new-dashboard">
@@ -135,6 +144,11 @@ const MerchantList = () => {
                 style={{ marginTop: "30px" }}
               >
                 <h2 className="dashboard-heading">Slot List</h2>
+                {/* Display deposit data */}
+                <div className="deposit-info">
+                  <div>Total Deposit: ₹{depositData.totalDeposit}</div>
+                  <div>Today's Deposit: ₹{depositData.todaysDeposit}</div>
+                </div>
               </div>
               <div
                 className="table-responsive"
@@ -148,8 +162,6 @@ const MerchantList = () => {
                     <tr>
                       <th>ID</th>
                       <th>Slot Name</th>
-                      <th>Price</th>
-                      <th>Entry Fee</th>
                       <th>Till Time</th>
                       <th>Action</th> {/* New column for actions */}
                     </tr>
@@ -159,8 +171,6 @@ const MerchantList = () => {
                       <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>{user.sloteName}</td>
-                        <td>{user.price}</td>
-                        <td>{user.entryFee}</td>
                         <td>{user.toTime}</td>
                         <td>
                           <button
@@ -196,26 +206,8 @@ const MerchantList = () => {
               onChange={handleUpdateChange}
             />
           </div>
-          <div className="form-group">
-            <label>Price</label>
-            <input
-              type="text"
-              className="form-control"
-              name="price"
-              value={updatedSlot.price}
-              onChange={handleUpdateChange}
-            />
-          </div>
-          <div className="form-group">
-            <label>Entry Fee</label>
-            <input
-              type="text"
-              className="form-control"
-              name="entryFee"
-              value={updatedSlot.entryFee}
-              onChange={handleUpdateChange}
-            />
-          </div>
+         
+         
           <div className="form-group">
             <label>Till Time</label>
             <input

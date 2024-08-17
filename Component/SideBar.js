@@ -87,12 +87,12 @@ const SideBar = () => {
                 style={{ cursor: "pointer" }}
               >
                 <i className="fa-regular fa-grid"></i>
-                <span className="dash-texts">#Win List</span>
+                <span className="dash-texts">#Dashboard</span>
               </a>
               {winListOpen && (
                 <ul id="win-list-nav" className="nav-content collapse show" data-bs-parent="#sidebar-nav">
                   <li>
-                    <a href="/#">
+                    <a href="/faridabaad">
                       <i className="fa fa-circle"></i>
                       <span>Faridabad</span>
                     </a>
